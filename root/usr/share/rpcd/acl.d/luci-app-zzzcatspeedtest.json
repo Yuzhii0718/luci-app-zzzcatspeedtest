@@ -1,0 +1,11 @@
+{
+	"luci-app-zzzcatspeedtest": {
+		"description": "Grant access to LuCI app zzzcatspeedtest",
+		"read": {
+			"uci": ["zzzcatspeedtest"]
+		},
+		"write": {
+			"uci": ["zzzcatspeedtest"]
+		}
+	}
+}

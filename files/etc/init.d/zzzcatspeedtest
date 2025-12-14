@@ -1,0 +1,91 @@
+#!/bin/sh /etc/rc.common
+
+USE_PROCD=1
+START=95
+
+SERVICE_NAME=zzzcatspeedtest
+SERVICE_HOME=/usr/share/zzzcatspeedtest
+# Use speedtest-go backend binary
+SERVICE_BIN=${SERVICE_HOME}/speedtest-arm64
+SETTINGS_FILE=${SERVICE_HOME}/settings.toml
+STATE_DIR=/var/lib/${SERVICE_NAME}
+
+load_option() {
+	local section=$1
+	local option=$2
+	local default=$3
+
+	config_get value "$section" "$option" "$default"
+	echo "$value"
+}
+
+bool_to_toml() {
+	[ "$1" = "1" ] && echo true || echo false
+}
+
+write_settings() {
+	local bind_address listen_port proxy_port server_lat server_lng api_key assets_path redact_ip
+	local db_type db_host db_name db_user db_pass db_file
+
+	bind_address=$(load_option main bind_address "")
+	listen_port=$(load_option main listen_port 8989)
+	proxy_port=$(load_option main proxyprotocol_port 0)
+	server_lat=$(load_option main server_lat 1)
+	server_lng=$(load_option main server_lng 1)
+	api_key=$(load_option main ipinfo_api_key "")
+	assets_path=$(load_option main assets_path "")
+	# If assets_path not set in UCI, default to bundled assets
+	[ -z "$assets_path" ] && assets_path="${SERVICE_HOME}/assets"
+	redact_ip=$(bool_to_toml "$(load_option main redact_ip_addresses 0)")
+	db_type=$(load_option main database_type bolt)
+	db_host=$(load_option main database_hostname "")
+	db_name=$(load_option main database_name "")
+	db_user=$(load_option main database_username "")
+	db_pass=$(load_option main database_password "")
+	db_file=$(load_option main database_file "/var/lib/${SERVICE_NAME}/speedtest.db")
+
+	mkdir -p "$STATE_DIR"
+	mkdir -p "$(dirname "$db_file")"
+
+	cat >"$SETTINGS_FILE" <<-EOF
+bind_address="${bind_address}"
+listen_port=${listen_port}
+proxyprotocol_port=${proxy_port}
+server_lat=${server_lat}
+server_lng=${server_lng}
+ipinfo_api_key="${api_key}"
+assets_path="${assets_path}"
+redact_ip_addresses=${redact_ip}
+database_type="${db_type}"
+database_hostname="${db_host}"
+database_name="${db_name}"
+database_username="${db_user}"
+database_password="${db_pass}"
+database_file="${db_file}"
+EOF
+}
+
+start_service() {
+	config_load "$SERVICE_NAME"
+
+	if [ ! -x "$SERVICE_BIN" ]; then
+		logger -t "$SERVICE_NAME" "backend binary missing: $SERVICE_BIN"
+		return 1
+	fi
+
+	write_settings
+
+	procd_open_instance
+	procd_set_param command /bin/sh -c "cd ${SERVICE_HOME} && exec ./$(basename "$SERVICE_BIN")"
+	procd_set_param respawn 3600 5 5
+	procd_set_param file "$SETTINGS_FILE"
+	procd_close_instance
+}
+
+stop_service() {
+	return 0
+}
+
+service_triggers() {
+	procd_add_reload_trigger "$SERVICE_NAME"
+}

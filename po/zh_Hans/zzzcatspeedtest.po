@@ -1,0 +1,50 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+msgid "Speedtest"
+msgstr "网速测试"
+
+msgid "ZZZ.Cat Speedtest"
+msgstr "网速测试"
+
+msgid "LAN network speed test tool. Backend listens on port %s."
+msgstr "局域网网速测试工具。后端监听端口 %s。"
+
+msgid "Status"
+msgstr "状态"
+
+msgid "Running"
+msgstr "运行中"
+
+msgid "Stopped"
+msgstr "已停止"
+
+msgid "Autostart"
+msgstr "开机自启"
+
+msgid "Enabled on boot"
+msgstr "已启用"
+
+msgid "Disabled on boot"
+msgstr "已禁用"
+
+msgid "Actions"
+msgstr "操作"
+
+msgid "Start"
+msgstr "启动"
+
+msgid "Stop"
+msgstr "停止"
+
+msgid "Open test page"
+msgstr "打开测试页面"
+
+msgid "Autostart control"
+msgstr "自启控制"
+
+msgid "Enable autostart"
+msgstr "启用自启"
+
+msgid "Disable autostart"
+msgstr "禁用自启"

@@ -1,0 +1,13 @@
+{
+	"admin/services/zzzcatspeedtest": {
+		"title": "Speedtest",
+		"order": 60,
+		"action": {
+			"type": "view",
+			"path": "zzzcatspeedtest/status"
+		},
+		"depends": {
+			"uci": { "zzzcatspeedtest": true }
+		}
+	}
+}

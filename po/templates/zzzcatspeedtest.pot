@@ -1,0 +1,50 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+msgid "Speedtest"
+msgstr ""
+
+msgid "ZZZ.Cat Speedtest"
+msgstr ""
+
+msgid "LAN network speed test tool. Backend listens on port %s."
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "Running"
+msgstr ""
+
+msgid "Stopped"
+msgstr ""
+
+msgid "Autostart"
+msgstr ""
+
+msgid "Enabled on boot"
+msgstr ""
+
+msgid "Disabled on boot"
+msgstr ""
+
+msgid "Actions"
+msgstr ""
+
+msgid "Start"
+msgstr ""
+
+msgid "Stop"
+msgstr ""
+
+msgid "Open test page"
+msgstr ""
+
+msgid "Autostart control"
+msgstr ""
+
+msgid "Enable autostart"
+msgstr ""
+
+msgid "Disable autostart"
+msgstr ""
