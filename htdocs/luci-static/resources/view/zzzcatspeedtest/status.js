@@ -18,16 +18,17 @@ var callServiceList = rpc.declare({
 return view.extend({
 	load: function() {
 			return Promise.all([
+				(L.loadCatalog ? L.loadCatalog('zzzcatspeedtest') : Promise.resolve()),
 				callServiceList('zzzcatspeedtest'),
-				L.resolveDefault(fs.exec('test', ['-e', '/usr/share/zzzcatspeedtest/speedtest-go']), { code: 1 }),
+				L.resolveDefault(fs.stat('/usr/share/zzzcatspeedtest/speedtest-go'), null),
 				uci.load('zzzcatspeedtest')
 			]);
 	},
 
 	render: function(data) {
-		var serviceStatus = data ? data[0] : null;
-			var testExec = data ? data[1] : null;
-			var binaryExists = !!(testExec && testExec.code === 0);
+		var serviceStatus = data ? data[1] : null;
+			var testStat = data ? data[2] : null;
+			var binaryExists = !!(testStat && (testStat.type === 'file' || testStat.type === 'link'));
 		var isRunning = serviceStatus && serviceStatus.zzzcatspeedtest && 
 		                serviceStatus.zzzcatspeedtest.instances && 
 		                Object.keys(serviceStatus.zzzcatspeedtest.instances).length > 0;
