@@ -6,7 +6,7 @@ START=95
 SERVICE_NAME=zzzcatspeedtest
 SERVICE_HOME=/usr/share/zzzcatspeedtest
 # Use speedtest-go backend binary
-SERVICE_BIN=${SERVICE_HOME}/speedtest-arm64
+SERVICE_BIN=${SERVICE_HOME}/speedtest-go
 SETTINGS_FILE=${SERVICE_HOME}/settings.toml
 STATE_DIR=/var/lib/${SERVICE_NAME}
 

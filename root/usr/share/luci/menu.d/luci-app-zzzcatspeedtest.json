@@ -1,6 +1,7 @@
 {
 	"admin/services/zzzcatspeedtest": {
 		"title": "Speedtest",
+		"i18n": "zzzcatspeedtest",
 		"order": 60,
 		"action": {
 			"type": "view",

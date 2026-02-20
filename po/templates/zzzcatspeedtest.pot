@@ -4,7 +4,7 @@ msgstr "Content-Type: text/plain; charset=UTF-8"
 msgid "Speedtest"
 msgstr ""
 
-msgid "ZZZ.Cat Speedtest"
+msgid "ZZZCat Speedtest"
 msgstr ""
 
 msgid "LAN network speed test tool. Backend listens on port %s."
@@ -38,6 +38,27 @@ msgid "Stop"
 msgstr ""
 
 msgid "Open test page"
+msgstr ""
+
+msgid "Open"
+msgstr ""
+
+msgid "Binary Status (speedtest-go)"
+msgstr ""
+
+msgid "Installed"
+msgstr ""
+
+msgid "Not Installed"
+msgstr ""
+
+msgid "Service Control"
+msgstr ""
+
+msgid "Service %s command executed"
+msgstr ""
+
+msgid "Error: %s"
 msgstr ""
 
 msgid "Autostart control"

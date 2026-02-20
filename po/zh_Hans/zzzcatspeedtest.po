@@ -4,7 +4,7 @@ msgstr "Content-Type: text/plain; charset=UTF-8"
 msgid "Speedtest"
 msgstr "网速测试"
 
-msgid "ZZZ.Cat Speedtest"
+msgid "ZZZCat Speedtest"
 msgstr "网速测试"
 
 msgid "LAN network speed test tool. Backend listens on port %s."
@@ -39,6 +39,27 @@ msgstr "停止"
 
 msgid "Open test page"
 msgstr "打开测试页面"
+
+msgid "Open"
+msgstr "打开"
+
+msgid "Binary Status (speedtest-go)"
+msgstr "二进制状态（speedtest-go）"
+
+msgid "Installed"
+msgstr "已安装"
+
+msgid "Not Installed"
+msgstr "未安装"
+
+msgid "Service Control"
+msgstr "服务控制"
+
+msgid "Service %s command executed"
+msgstr "服务 %s 命令已执行"
+
+msgid "Error: %s"
+msgstr "错误：%s"
 
 msgid "Autostart control"
 msgstr "自启控制"

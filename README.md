@@ -1,6 +1,6 @@
 # luci-app-zzzcatspeedtest
 
-LuCI wrapper for the bundled arm64 speedtest backend. Targets OpenWrt 24.10.
+LuCI wrapper for the bundled speedtest-go backend. Targets OpenWrt 21.02+.
 
 Only use high-performance devices for best results that can accurately reflect your actual network speed.
 
@@ -12,6 +12,8 @@ Only use high-performance devices for best results that can accurately reflect y
 # from your OpenWrt SDK / buildroot
 ./scripts/feeds update luci packages
 ./scripts/feeds install luci-base luci-compat # only if your tree still needs compat
+echo "CONFIG_PACKAGE_luci-app-zzzcatspeedtest=y" >>.config
+make defconfig
 make package/luci-app-zzzcatspeedtest/{clean,prepare,compile} V=s
 ```
 
@@ -26,7 +28,8 @@ After installation, open LuCI → Services → ZZZCat Speedtest. Click **Start**
 
 ## Notes
 
-- Backend binary is prebuilt for arm64 (`ONLY_FOR_ARCHS:=aarch64`), so it must match your target.
+- Backend binaries are downloaded at build time from the speedtest-go GitHub releases (default: v1.1.5) and installed as `/usr/share/zzzcatspeedtest/speedtest-go`.
+- The build script will attempt to verify SHA256 checksums from `checksums.txt` and only warn on failure (does not stop the build).
 - Settings are written to `/usr/share/zzzcatspeedtest/settings.toml` on start; the database defaults to `/var/lib/zzzcatspeedtest/speedtest.db`.
 - Autostart uses the init script: `service zzzcatspeedtest enable` / `disable`.
 
