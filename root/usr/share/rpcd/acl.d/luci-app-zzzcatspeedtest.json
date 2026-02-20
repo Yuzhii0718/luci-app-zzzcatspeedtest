@@ -6,10 +6,11 @@
 		},
 		"read": {
 			"uci": ["zzzcatspeedtest"],
-			"file": ["/usr/share/zzzcatspeedtest/speedtest-go"]
+			"file": ["/usr/share/zzzcatspeedtest/speedtest-go", "/etc/init.d/zzzcatspeedtest"]
 		},
 		"write": {
-			"uci": ["zzzcatspeedtest"]
+			"uci": ["zzzcatspeedtest"],
+			"file": ["/etc/init.d/zzzcatspeedtest"]
 		},
 		"exec": {
 			"file": ["/etc/init.d/zzzcatspeedtest"]
