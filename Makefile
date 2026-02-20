@@ -82,7 +82,7 @@ endef
 
 define Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)
-	# Download speedtest-go payload per target arch
+	# Use speedtest-go payload (downloaded per target arch)
 	if [ -z "$(SPEEDTEST_ARCHIVE_SUFFIX)" ]; then \
 		echo "Unsupported target arch: $(SPEEDTEST_TARGET_ARCH) $(SPEEDTEST_TARGET_CPU)" >&2; \
 		exit 1; \
@@ -104,12 +104,15 @@ define Build/Prepare
 	fi
 	$(TAR) -xzf $(DL_DIR)/$(SPEEDTEST_FILE) -C $(PKG_BUILD_DIR)
 	FOUND_BIN=""; \
-	if [ -f $(PKG_BUILD_DIR)/speedtest-go ]; then \
-		FOUND_BIN="$(PKG_BUILD_DIR)/speedtest-go"; \
-	elif [ -f $(PKG_BUILD_DIR)/speedtest ]; then \
-		FOUND_BIN="$(PKG_BUILD_DIR)/speedtest"; \
-	else \
-		FOUND_BIN=`find $(PKG_BUILD_DIR) -type f \( -name 'speedtest-go' -o -name 'speedtest' \) -print -quit`; \
+	FOUND_BIN=`find $(PKG_BUILD_DIR) \( -type f -o -type l \) -perm -111 -name 'speedtest*' -print -quit`; \
+	if [ -z "$$$$FOUND_BIN" ]; then \
+		if [ -f $(PKG_BUILD_DIR)/speedtest-go ]; then \
+			FOUND_BIN="$(PKG_BUILD_DIR)/speedtest-go"; \
+		elif [ -f $(PKG_BUILD_DIR)/speedtest ]; then \
+			FOUND_BIN="$(PKG_BUILD_DIR)/speedtest"; \
+		else \
+			FOUND_BIN=`find $(PKG_BUILD_DIR) \( -type f -o -type l \) \( -name 'speedtest-go' -o -name 'speedtest' -o -name 'speedtest*' \) -print -quit`; \
+		fi; \
 	fi; \
 	if [ -n "$$$$FOUND_BIN" ]; then \
 		mv -f "$$$$FOUND_BIN" $(PKG_BUILD_DIR)/$(SPEEDTEST_BIN); \
@@ -134,12 +137,15 @@ define Package/zzzcatspeedtest/install
 	fi
 	if [ ! -f $(PKG_BUILD_DIR)/$(SPEEDTEST_BIN) ]; then \
 		FOUND_BIN=""; \
-		if [ -f $(PKG_BUILD_DIR)/speedtest-go ]; then \
-			FOUND_BIN="$(PKG_BUILD_DIR)/speedtest-go"; \
-		elif [ -f $(PKG_BUILD_DIR)/speedtest ]; then \
-			FOUND_BIN="$(PKG_BUILD_DIR)/speedtest"; \
-		else \
-			FOUND_BIN=`find $(PKG_BUILD_DIR) -type f \( -name 'speedtest-go' -o -name 'speedtest' \) -print -quit`; \
+		FOUND_BIN=`find $(PKG_BUILD_DIR) \( -type f -o -type l \) -perm -111 -name 'speedtest*' -print -quit`; \
+		if [ -z "$$$$FOUND_BIN" ]; then \
+			if [ -f $(PKG_BUILD_DIR)/speedtest-go ]; then \
+				FOUND_BIN="$(PKG_BUILD_DIR)/speedtest-go"; \
+			elif [ -f $(PKG_BUILD_DIR)/speedtest ]; then \
+				FOUND_BIN="$(PKG_BUILD_DIR)/speedtest"; \
+			else \
+				FOUND_BIN=`find $(PKG_BUILD_DIR) \( -type f -o -type l \) \( -name 'speedtest-go' -o -name 'speedtest' -o -name 'speedtest*' \) -print -quit`; \
+			fi; \
 		fi; \
 		if [ -n "$$$$FOUND_BIN" ]; then \
 			mv -f "$$$$FOUND_BIN" $(PKG_BUILD_DIR)/$(SPEEDTEST_BIN); \
