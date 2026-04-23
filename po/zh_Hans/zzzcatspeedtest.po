@@ -13,6 +13,9 @@ msgstr "局域网网速测试工具。后端监听端口 %s。"
 msgid "Status"
 msgstr "状态"
 
+msgid "Unknown"
+msgstr "未知"
+
 msgid "Running"
 msgstr "运行中"
 
@@ -46,6 +49,15 @@ msgstr "打开"
 msgid "Binary Status (speedtest-go)"
 msgstr "二进制状态（speedtest-go）"
 
+msgid "RPC Status"
+msgstr "RPC 状态"
+
+msgid "Available"
+msgstr "可用"
+
+msgid "Unavailable (permission denied or service missing)"
+msgstr "不可用（权限不足或服务不存在）"
+
 msgid "Installed"
 msgstr "已安装"
 
@@ -60,6 +72,9 @@ msgstr "服务 %s 命令已执行"
 
 msgid "Error: %s"
 msgstr "错误：%s"
+
+msgid "Backend binary is missing. Please reinstall package zzzcatspeedtest."
+msgstr "后端二进制文件缺失，请重新安装 zzzcatspeedtest 软件包。"
 
 msgid "Autostart control"
 msgstr "自启控制"

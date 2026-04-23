@@ -1,19 +1,18 @@
 {
 	"luci-app-zzzcatspeedtest": {
 		"description": "Grant access to LuCI app zzzcatspeedtest",
-		"ubus": {
-			"service": ["list"]
-		},
 		"read": {
+			"ubus": {
+				"luci": ["getInitList"]
+			},
 			"uci": ["zzzcatspeedtest"],
-			"file": ["/usr/share/zzzcatspeedtest/speedtest-go", "/etc/init.d/zzzcatspeedtest"]
+			"file": ["/usr/share/zzzcatspeedtest/speedtest-go"]
 		},
 		"write": {
-			"uci": ["zzzcatspeedtest"],
-			"file": ["/etc/init.d/zzzcatspeedtest"]
-		},
-		"exec": {
-			"file": ["/etc/init.d/zzzcatspeedtest"]
+			"ubus": {
+				"luci": ["setInitAction"]
+			},
+			"uci": ["zzzcatspeedtest"]
 		}
 	}
 }

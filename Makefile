@@ -72,7 +72,7 @@ define Package/luci-app-zzzcatspeedtest
 	CATEGORY:=LuCI
 	SUBMENU:=3. Applications
 	TITLE:=LuCI support for ZZZCat Speedtest
-	DEPENDS:=+zzzcatspeedtest +luci-base +luci-compat
+	DEPENDS:=+zzzcatspeedtest +luci-base
 	PKGARCH:=all
 endef
 

@@ -11,7 +11,7 @@ Only use high-performance devices for best results that can accurately reflect y
 ```sh
 # from your OpenWrt SDK / buildroot
 ./scripts/feeds update luci packages
-./scripts/feeds install luci-base luci-compat # only if your tree still needs compat
+./scripts/feeds install luci-base
 echo "CONFIG_PACKAGE_luci-app-zzzcatspeedtest=y" >>.config
 make defconfig
 make package/luci-app-zzzcatspeedtest/{clean,prepare,compile} V=s
