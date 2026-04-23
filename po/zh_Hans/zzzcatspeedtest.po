@@ -205,11 +205,17 @@ msgstr "版本：%s | 构建时间：%s"
 msgid "Init list"
 msgstr "Init 列表"
 
+msgid "Service list"
+msgstr "服务列表"
+
 msgid "Init script"
 msgstr "Init 脚本"
 
 msgid "Process check"
 msgstr "进程检测"
+
+msgid "HTTP endpoint"
+msgstr "HTTP 端点"
 
 msgid "No running source detected"
 msgstr "未检测到运行来源"

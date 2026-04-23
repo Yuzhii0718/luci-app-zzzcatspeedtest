@@ -21,6 +21,13 @@ var callInitAction = rpc.declare({
 	expect: { result: false }
 });
 
+var callServiceList = rpc.declare({
+	object: 'service',
+	method: 'list',
+	params: ['name'],
+	expect: { '': {} }
+});
+
 function asBool(v) {
 	return v === true || v === 1 || v === '1' || v === 'true';
 }
@@ -83,6 +90,15 @@ function parseBuildInfo(raw) {
 	if (!raw)
 		return null;
 
+	if (typeof raw === 'object') {
+		if (typeof raw.data === 'string')
+			raw = raw.data;
+		else if (typeof raw.content === 'string')
+			raw = raw.content;
+		else
+			return null;
+	}
+
 	try {
 		return JSON.parse(raw);
 	}
@@ -91,43 +107,90 @@ function parseBuildInfo(raw) {
 	}
 }
 
+function probeHttpBackend(port) {
+	var url = 'http://' + window.location.hostname + ':' + port + '/backend/empty';
+
+	if (typeof window.fetch !== 'function')
+		return Promise.resolve(false);
+
+	return new Promise(function(resolve) {
+		var settled = false;
+		var done = function(ok) {
+			if (settled)
+				return;
+			settled = true;
+			resolve(!!ok);
+		};
+
+		var timer = window.setTimeout(function() {
+			done(false);
+		}, 2000);
+
+		window.fetch(url, {
+			method: 'GET',
+			mode: 'cors',
+			cache: 'no-store'
+		}).then(function(resp) {
+			window.clearTimeout(timer);
+			done(!!resp && resp.ok);
+		}).catch(function() {
+			window.clearTimeout(timer);
+			done(false);
+		});
+	});
+}
+
 return view.extend({
 	load: function() {
+		var listenPort = parseInt(uci.get('zzzcatspeedtest', 'main', 'listen_port'), 10);
+		if (isNaN(listenPort) || listenPort <= 0)
+			listenPort = 8989;
+
 		return Promise.all([
 			(L.loadCatalog ? L.loadCatalog('zzzcatspeedtest') : Promise.resolve()),
 			L.resolveDefault(callInitList('zzzcatspeedtest'), null),
+			L.resolveDefault(callServiceList('zzzcatspeedtest'), null),
 			L.resolveDefault(fs.stat('/usr/share/zzzcatspeedtest/speedtest-go'), null),
 			L.resolveDefault(fs.exec('/etc/init.d/zzzcatspeedtest', ['running']), null),
 			L.resolveDefault(fs.exec('/bin/busybox', ['pidof', 'speedtest-go']), null),
 			L.resolveDefault(fs.read('/usr/share/zzzcatspeedtest/buildinfo.json'), null),
 			L.resolveDefault(fs.stat('/usr/share/zzzcatspeedtest/buildinfo.json'), null),
+			L.resolveDefault(probeHttpBackend(listenPort), false),
 			uci.load('zzzcatspeedtest')
 		]);
 	},
 
 	render: function(data) {
 		var initStatus = data ? data[1] : null;
-		var testStat = data ? data[2] : null;
-		var runningByInitScript = data ? data[3] : null;
-		var runningByPidof = data ? data[4] : null;
-		var buildInfo = parseBuildInfo(data ? data[5] : null);
-		var buildInfoStat = data ? data[6] : null;
+		var serviceStatus = data ? data[2] : null;
+		var testStat = data ? data[3] : null;
+		var runningByInitScript = data ? data[4] : null;
+		var runningByPidof = data ? data[5] : null;
+		var buildInfo = parseBuildInfo(data ? data[6] : null);
+		var buildInfoStat = data ? data[7] : null;
+		var runningByHttpEndpoint = !!(data ? data[8] : false);
 		var binaryExists = !!(testStat && (testStat.type === 'file' || testStat.type === 'link'));
 		var initInfo = initStatus && initStatus.zzzcatspeedtest ? initStatus.zzzcatspeedtest : null;
+		var serviceInfo = serviceStatus && serviceStatus.zzzcatspeedtest ? serviceStatus.zzzcatspeedtest : null;
+		var runningByServiceList = !!(serviceInfo && serviceInfo.instances && Object.keys(serviceInfo.instances).length > 0);
 		var hasInitStatus = !!initInfo;
 		var runningByInitList = hasInitStatus ? asBool(initInfo.running) : false;
 		var runningByScript = isExecOk(runningByInitScript) || stdoutContains(runningByInitScript, /running/i);
 		var runningByProcess = isExecOk(runningByPidof) || hasStdout(runningByPidof);
-		var isRunning = runningByInitList || runningByScript || runningByProcess;
+		var isRunning = runningByInitList || runningByServiceList || runningByScript || runningByProcess || runningByHttpEndpoint;
 		var isEnabled = hasInitStatus ? asBool(initInfo.enabled) : false;
 
 		var runningSources = [];
 		if (runningByInitList)
 			runningSources.push(_('Init list'));
+		if (runningByServiceList)
+			runningSources.push(_('Service list'));
 		if (runningByScript)
 			runningSources.push(_('Init script'));
 		if (runningByProcess)
 			runningSources.push(_('Process check'));
+		if (runningByHttpEndpoint)
+			runningSources.push(_('HTTP endpoint'));
 
 		var statusSourceText = runningSources.length
 			? runningSources.join(', ')

@@ -205,10 +205,16 @@ msgstr ""
 msgid "Init list"
 msgstr ""
 
+msgid "Service list"
+msgstr ""
+
 msgid "Init script"
 msgstr ""
 
 msgid "Process check"
+msgstr ""
+
+msgid "HTTP endpoint"
 msgstr ""
 
 msgid "No running source detected"

@@ -3,7 +3,8 @@
 		"description": "Grant access to LuCI app zzzcatspeedtest",
 		"read": {
 			"ubus": {
-				"luci": ["getInitList"]
+				"luci": ["getInitList"],
+				"service": ["list"]
 			},
 			"uci": ["zzzcatspeedtest"],
 			"file": [
