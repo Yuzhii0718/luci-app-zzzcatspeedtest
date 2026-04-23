@@ -6,6 +6,7 @@ PKG_RELEASE:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 SPEEDTEST_VERSION:=1.1.5
+PKG_BUILD_TIMESTAMP:=$(shell date -u +%Y-%m-%dT%H:%M:%SZ)
 PKG_LICENSE:=Proprietary
 PKG_MAINTAINER:=Yuzhii0718 <yuzhii0718@outlook.com>
 
@@ -130,6 +131,7 @@ endef
 
 define Package/zzzcatspeedtest/install
 	$(INSTALL_DIR) $(1)/usr/share/zzzcatspeedtest
+	echo '{"package":"$(PKG_NAME)","version":"$(PKG_VERSION)-$(PKG_RELEASE)","speedtest_go":"v$(SPEEDTEST_VERSION)","build_timestamp":"$(PKG_BUILD_TIMESTAMP)"}' > $(1)/usr/share/zzzcatspeedtest/buildinfo.json
 	# Install speedtest-go backend binary
 	if [ -z "$(SPEEDTEST_BIN)" ]; then \
 		echo "Unsupported target arch: $(SPEEDTEST_TARGET_ARCH) $(SPEEDTEST_TARGET_CPU)" >&2; \

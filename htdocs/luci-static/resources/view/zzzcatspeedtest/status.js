@@ -58,12 +58,37 @@ function validateFloatInRange(value, min, max, label) {
 	return true;
 }
 
+function isExecOk(ret) {
+	if (!ret)
+		return false;
+
+	if (typeof ret.code === 'number')
+		return ret.code === 0;
+
+	return false;
+}
+
+function parseBuildInfo(raw) {
+	if (!raw)
+		return null;
+
+	try {
+		return JSON.parse(raw);
+	}
+	catch (e) {
+		return null;
+	}
+}
+
 return view.extend({
 	load: function() {
 		return Promise.all([
 			(L.loadCatalog ? L.loadCatalog('zzzcatspeedtest') : Promise.resolve()),
 			L.resolveDefault(callInitList('zzzcatspeedtest'), null),
 			L.resolveDefault(fs.stat('/usr/share/zzzcatspeedtest/speedtest-go'), null),
+			L.resolveDefault(fs.exec('/etc/init.d/zzzcatspeedtest', ['running']), null),
+			L.resolveDefault(fs.exec('/bin/busybox', ['pidof', 'speedtest-go']), null),
+			L.resolveDefault(fs.read('/usr/share/zzzcatspeedtest/buildinfo.json'), null),
 			uci.load('zzzcatspeedtest')
 		]);
 	},
@@ -71,10 +96,16 @@ return view.extend({
 	render: function(data) {
 		var initStatus = data ? data[1] : null;
 		var testStat = data ? data[2] : null;
+		var runningByInitScript = data ? data[3] : null;
+		var runningByPidof = data ? data[4] : null;
+		var buildInfo = parseBuildInfo(data ? data[5] : null);
 		var binaryExists = !!(testStat && (testStat.type === 'file' || testStat.type === 'link'));
 		var initInfo = initStatus && initStatus.zzzcatspeedtest ? initStatus.zzzcatspeedtest : null;
 		var hasInitStatus = !!initInfo;
-		var isRunning = hasInitStatus ? asBool(initInfo.running) : false;
+		var runningByInitList = hasInitStatus ? asBool(initInfo.running) : false;
+		var runningByScript = isExecOk(runningByInitScript);
+		var runningByProcess = isExecOk(runningByPidof);
+		var isRunning = runningByInitList || runningByScript || runningByProcess;
 		var isEnabled = hasInitStatus ? asBool(initInfo.enabled) : false;
 
 		var listenPort = parseInt(uci.get('zzzcatspeedtest', 'main', 'listen_port'), 10);
@@ -134,6 +165,16 @@ return view.extend({
 			var status = this.cfgvalue();
 			var color = hasInitStatus ? 'green' : '#d48806';
 			return '<span style="color:' + color + '">' + status + '</span>';
+		};
+
+		o = s.option(form.DummyValue, '_buildinfo', _('Build Info'));
+		o.cfgvalue = function() {
+			if (!buildInfo)
+				return _('Unknown');
+
+			var version = buildInfo.version || 'n/a';
+			var ts = buildInfo.build_timestamp || 'n/a';
+			return _('Version: %s | Build time: %s').format(version, ts);
 		};
 
 		o = s.option(form.Button, '_start', _('Service Control'));

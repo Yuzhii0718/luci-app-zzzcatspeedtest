@@ -192,3 +192,9 @@ msgstr ""
 
 msgid "Enable to show advanced configuration options."
 msgstr ""
+
+msgid "Build Info"
+msgstr ""
+
+msgid "Version: %s | Build time: %s"
+msgstr ""

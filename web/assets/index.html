@@ -178,36 +178,53 @@ function format(d){
 //UI CODE
 var uiData=null;
 function startStop(){
-    if(s.getState()==3){
-		//speedtest is running, abort
+	if(s.getState()==3){
+		// speedtest is running, abort
 		s.abort();
-		data=null;
+		uiData=null;
 		I("startStopBtn").className="";
 		initUI();
 	}else{
-		//test is not running, begin
+		// ===== 读取测速时间选择 =====
+		var t = I("timeSelect") ? I("timeSelect").value : "auto";
+
+		if (t === "auto") {
+			// 默认行为：自动测速时间
+			s.setParameter("time_auto", "true");
+		} else {
+			// 固定测速时间（秒）
+			s.setParameter("time_auto", "false");
+			s.setParameter("time_dl_max", t);
+			s.setParameter("time_ul_max", t);
+		}
+
+		// ===== 开始测速 =====
 		I("startStopBtn").className="running";
 		I("shareArea").style.display="none";
+
 		s.onupdate=function(data){
-            uiData=data;
+			uiData=data;
 		};
+
 		s.onend=function(aborted){
-            I("startStopBtn").className="";
-            updateUI(true);
-            if(!aborted){
-                //if testId is present, show sharing panel, otherwise do nothing
-                try{
-                    var testId=uiData.testId;
-                    if(testId!=null){
-                        var shareURL=window.location.href.substring(0,window.location.href.lastIndexOf("/"))+"/results/?id="+testId;
-                        I("resultsImg").src=shareURL;
-                        I("resultsURL").value=shareURL;
-                        I("testId").innerHTML=testId;
-                        I("shareArea").style.display="";
-                    }
-                }catch(e){}
-            }
+			I("startStopBtn").className="";
+			updateUI(true);
+			if(!aborted){
+				// if testId is present, show sharing panel
+				try{
+					var testId=uiData.testId;
+					if(testId!=null){
+						var base=window.location.href.substring(0,window.location.href.lastIndexOf("/"));
+						var shareURL=base+"/results/?id="+testId;
+						I("resultsImg").src=shareURL;
+						I("resultsURL").value=shareURL;
+						I("testId").innerHTML=testId;
+						I("shareArea").style.display="";
+					}
+				}catch(e){}
+			}
 		};
+
 		s.start();
 	}
 }
@@ -436,6 +453,19 @@ function initUI(){
 		<select id="langSelect" onchange="setLang(this.value)">
 			<option value="en">English</option>
 			<option value="zh-CN">简体中文</option>
+		</select>
+	</span>
+		<span style="margin-left:1em;">
+		<label for="timeSelect" style="margin-right:0.5em;">⏱</label>
+		<select id="timeSelect">
+			<option value="auto">测试时间（默认）</option>
+			<option value="5">5 秒</option>
+			<option value="10">10 秒</option>
+			<option value="15">15 秒</option>
+			<option value="20">20 秒</option>
+			<option value="30">30 秒</option>
+			<option value="60">60 秒</option>
+			<option value="600">10 分钟</option>
 		</select>
 	</span>
 	<script>

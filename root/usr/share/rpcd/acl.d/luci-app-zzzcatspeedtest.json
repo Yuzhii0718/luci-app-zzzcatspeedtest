@@ -13,6 +13,12 @@
 				"luci": ["setInitAction"]
 			},
 			"uci": ["zzzcatspeedtest"]
+		},
+		"exec": {
+			"file": [
+				"/etc/init.d/zzzcatspeedtest",
+				"/bin/busybox"
+			]
 		}
 	}
 }

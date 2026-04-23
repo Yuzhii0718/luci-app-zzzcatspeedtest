@@ -192,3 +192,9 @@ msgstr "高级模式"
 
 msgid "Enable to show advanced configuration options."
 msgstr "启用后显示高级配置项。"
+
+msgid "Build Info"
+msgstr "构建信息"
+
+msgid "Version: %s | Build time: %s"
+msgstr "版本：%s | 构建时间：%s"
