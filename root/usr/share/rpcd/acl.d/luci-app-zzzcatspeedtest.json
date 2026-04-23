@@ -6,15 +6,16 @@
 				"luci": ["getInitList"]
 			},
 			"uci": ["zzzcatspeedtest"],
-			"file": ["/usr/share/zzzcatspeedtest/speedtest-go"]
+			"file": [
+				"/usr/share/zzzcatspeedtest/speedtest-go",
+				"/usr/share/zzzcatspeedtest/buildinfo.json"
+			]
 		},
 		"write": {
 			"ubus": {
 				"luci": ["setInitAction"]
 			},
-			"uci": ["zzzcatspeedtest"]
-		},
-		"exec": {
+			"uci": ["zzzcatspeedtest"],
 			"file": [
 				"/etc/init.d/zzzcatspeedtest",
 				"/bin/busybox"

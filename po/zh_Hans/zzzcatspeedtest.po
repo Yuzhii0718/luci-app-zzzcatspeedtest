@@ -13,6 +13,9 @@ msgstr "局域网网速测试工具。后端监听端口 %s。"
 msgid "Status"
 msgstr "状态"
 
+msgid "Status source"
+msgstr "状态来源"
+
 msgid "Unknown"
 msgstr "未知"
 
@@ -198,3 +201,18 @@ msgstr "构建信息"
 
 msgid "Version: %s | Build time: %s"
 msgstr "版本：%s | 构建时间：%s"
+
+msgid "Init list"
+msgstr "Init 列表"
+
+msgid "Init script"
+msgstr "Init 脚本"
+
+msgid "Process check"
+msgstr "进程检测"
+
+msgid "No running source detected"
+msgstr "未检测到运行来源"
+
+msgid "Init status unavailable"
+msgstr "Init 状态不可用"

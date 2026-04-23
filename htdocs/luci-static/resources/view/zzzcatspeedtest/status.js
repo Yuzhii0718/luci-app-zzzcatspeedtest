@@ -68,6 +68,17 @@ function isExecOk(ret) {
 	return false;
 }
 
+function hasStdout(ret) {
+	return !!(ret && typeof ret.stdout === 'string' && ret.stdout.trim().length > 0);
+}
+
+function stdoutContains(ret, pattern) {
+	if (!ret || typeof ret.stdout !== 'string')
+		return false;
+
+	return pattern.test(ret.stdout);
+}
+
 function parseBuildInfo(raw) {
 	if (!raw)
 		return null;
@@ -89,6 +100,7 @@ return view.extend({
 			L.resolveDefault(fs.exec('/etc/init.d/zzzcatspeedtest', ['running']), null),
 			L.resolveDefault(fs.exec('/bin/busybox', ['pidof', 'speedtest-go']), null),
 			L.resolveDefault(fs.read('/usr/share/zzzcatspeedtest/buildinfo.json'), null),
+			L.resolveDefault(fs.stat('/usr/share/zzzcatspeedtest/buildinfo.json'), null),
 			uci.load('zzzcatspeedtest')
 		]);
 	},
@@ -99,14 +111,27 @@ return view.extend({
 		var runningByInitScript = data ? data[3] : null;
 		var runningByPidof = data ? data[4] : null;
 		var buildInfo = parseBuildInfo(data ? data[5] : null);
+		var buildInfoStat = data ? data[6] : null;
 		var binaryExists = !!(testStat && (testStat.type === 'file' || testStat.type === 'link'));
 		var initInfo = initStatus && initStatus.zzzcatspeedtest ? initStatus.zzzcatspeedtest : null;
 		var hasInitStatus = !!initInfo;
 		var runningByInitList = hasInitStatus ? asBool(initInfo.running) : false;
-		var runningByScript = isExecOk(runningByInitScript);
-		var runningByProcess = isExecOk(runningByPidof);
+		var runningByScript = isExecOk(runningByInitScript) || stdoutContains(runningByInitScript, /running/i);
+		var runningByProcess = isExecOk(runningByPidof) || hasStdout(runningByPidof);
 		var isRunning = runningByInitList || runningByScript || runningByProcess;
 		var isEnabled = hasInitStatus ? asBool(initInfo.enabled) : false;
+
+		var runningSources = [];
+		if (runningByInitList)
+			runningSources.push(_('Init list'));
+		if (runningByScript)
+			runningSources.push(_('Init script'));
+		if (runningByProcess)
+			runningSources.push(_('Process check'));
+
+		var statusSourceText = runningSources.length
+			? runningSources.join(', ')
+			: (hasInitStatus ? _('No running source detected') : _('Init status unavailable'));
 
 		var listenPort = parseInt(uci.get('zzzcatspeedtest', 'main', 'listen_port'), 10);
 		if (isNaN(listenPort) || listenPort <= 0)
@@ -123,7 +148,7 @@ return view.extend({
 
 		o = s.option(form.DummyValue, '_status', _('Status'));
 		o.cfgvalue = function() {
-			if (!hasInitStatus)
+			if (!hasInitStatus && !isRunning)
 				return _('Unknown');
 
 			return isRunning ? _('Running') : _('Stopped');
@@ -132,6 +157,11 @@ return view.extend({
 			var status = this.cfgvalue();
 			var color = isRunning ? 'green' : (hasInitStatus ? 'red' : '#d48806');
 			return '<span style="color:' + color + ';font-weight:bold">' + status + '</span>';
+		};
+
+		o = s.option(form.DummyValue, '_status_source', _('Status source'));
+		o.cfgvalue = function() {
+			return statusSourceText;
 		};
 
 		o = s.option(form.DummyValue, '_autostart', _('Autostart'));
@@ -169,8 +199,12 @@ return view.extend({
 
 		o = s.option(form.DummyValue, '_buildinfo', _('Build Info'));
 		o.cfgvalue = function() {
-			if (!buildInfo)
+			if (!buildInfo) {
+				if (buildInfoStat && buildInfoStat.mtime)
+					return _('Version: %s | Build time: %s').format(_('Unknown'), String(buildInfoStat.mtime));
+
 				return _('Unknown');
+			}
 
 			var version = buildInfo.version || 'n/a';
 			var ts = buildInfo.build_timestamp || 'n/a';

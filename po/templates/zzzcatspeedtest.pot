@@ -13,6 +13,9 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
+msgid "Status source"
+msgstr ""
+
 msgid "Unknown"
 msgstr ""
 
@@ -197,4 +200,19 @@ msgid "Build Info"
 msgstr ""
 
 msgid "Version: %s | Build time: %s"
+msgstr ""
+
+msgid "Init list"
+msgstr ""
+
+msgid "Init script"
+msgstr ""
+
+msgid "Process check"
+msgstr ""
+
+msgid "No running source detected"
+msgstr ""
+
+msgid "Init status unavailable"
 msgstr ""
