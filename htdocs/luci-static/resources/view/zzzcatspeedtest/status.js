@@ -193,11 +193,19 @@ return view.extend({
 		o.rmempty = true;
 		o.description = _('Optional. Leave empty to listen on all interfaces.');
 
+		o = s.option(form.Flag, '_show_advanced', _('Advanced mode'));
+		o.default = '0';
+		o.rmempty = false;
+		o.description = _('Enable to show advanced configuration options.');
+		o.write = function() {};
+		o.remove = function() {};
+
 		o = s.option(form.Value, 'proxyprotocol_port', _('Proxy protocol port'));
 		o.placeholder = '0';
 		o.default = '0';
 		o.rmempty = false;
 		o.description = _('0 disables proxy protocol listener.');
+		o.depends('_show_advanced', '1');
 		o.validate = function(section_id, value) {
 			return validatePort(value, true);
 		};
@@ -207,6 +215,7 @@ return view.extend({
 		o.default = '1';
 		o.rmempty = false;
 		o.description = _('Optional display value used by speedtest UI.');
+		o.depends('_show_advanced', '1');
 		o.validate = function(section_id, value) {
 			return validateFloatInRange(value, -90, 90, _('Server latitude'));
 		};
@@ -216,6 +225,7 @@ return view.extend({
 		o.default = '1';
 		o.rmempty = false;
 		o.description = _('Optional display value used by speedtest UI.');
+		o.depends('_show_advanced', '1');
 		o.validate = function(section_id, value) {
 			return validateFloatInRange(value, -180, 180, _('Server longitude'));
 		};
@@ -224,11 +234,13 @@ return view.extend({
 		o.password = true;
 		o.rmempty = true;
 		o.description = _('Optional. Used for IP geolocation enrichment.');
+		o.depends('_show_advanced', '1');
 
 		o = s.option(form.Value, 'assets_path', _('Assets path'));
 		o.placeholder = '/usr/share/zzzcatspeedtest/assets';
 		o.rmempty = true;
 		o.description = _('Leave empty to use bundled assets.');
+		o.depends('_show_advanced', '1');
 
 		o = s.option(form.Flag, 'redact_ip_addresses', _('Redact IP addresses'));
 		o.default = '0';
@@ -250,31 +262,31 @@ return view.extend({
 		o.default = '/var/lib/zzzcatspeedtest/speedtest.db';
 		o.rmempty = true;
 		o.description = _('Used by BoltDB / SQLite backends.');
-		o.depends('database_type', 'bolt');
-		o.depends('database_type', 'sqlite');
+		o.depends({ database_type: 'bolt', _show_advanced: '1' });
+		o.depends({ database_type: 'sqlite', _show_advanced: '1' });
 
 		o = s.option(form.Value, 'database_hostname', _('Database host'));
 		o.placeholder = '127.0.0.1:3306';
 		o.rmempty = true;
 		o.description = _('Host:port for MySQL / PostgreSQL.');
-		o.depends('database_type', 'mysql');
-		o.depends('database_type', 'postgres');
+		o.depends({ database_type: 'mysql', _show_advanced: '1' });
+		o.depends({ database_type: 'postgres', _show_advanced: '1' });
 
 		o = s.option(form.Value, 'database_name', _('Database name'));
 		o.rmempty = true;
-		o.depends('database_type', 'mysql');
-		o.depends('database_type', 'postgres');
+		o.depends({ database_type: 'mysql', _show_advanced: '1' });
+		o.depends({ database_type: 'postgres', _show_advanced: '1' });
 
 		o = s.option(form.Value, 'database_username', _('Database username'));
 		o.rmempty = true;
-		o.depends('database_type', 'mysql');
-		o.depends('database_type', 'postgres');
+		o.depends({ database_type: 'mysql', _show_advanced: '1' });
+		o.depends({ database_type: 'postgres', _show_advanced: '1' });
 
 		o = s.option(form.Value, 'database_password', _('Database password'));
 		o.password = true;
 		o.rmempty = true;
-		o.depends('database_type', 'mysql');
-		o.depends('database_type', 'postgres');
+		o.depends({ database_type: 'mysql', _show_advanced: '1' });
+		o.depends({ database_type: 'postgres', _show_advanced: '1' });
 
 		return m.render();
 	}

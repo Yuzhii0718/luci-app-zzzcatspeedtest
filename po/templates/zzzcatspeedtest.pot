@@ -186,3 +186,9 @@ msgstr ""
 
 msgid "Database password"
 msgstr ""
+
+msgid "Advanced mode"
+msgstr ""
+
+msgid "Enable to show advanced configuration options."
+msgstr ""

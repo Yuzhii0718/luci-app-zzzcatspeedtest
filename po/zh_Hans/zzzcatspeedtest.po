@@ -186,3 +186,9 @@ msgstr "数据库用户名"
 
 msgid "Database password"
 msgstr "数据库密码"
+
+msgid "Advanced mode"
+msgstr "高级模式"
+
+msgid "Enable to show advanced configuration options."
+msgstr "启用后显示高级配置项。"
