@@ -26,6 +26,12 @@ opkg install zzzcatspeedtest_*.ipk luci-app-zzzcatspeedtest_*.ipk
 
 After installation, open LuCI → Services → ZZZCat Speedtest. Click **Start** to launch the backend, then **Open test page** to load the embedded UI (defaults to <http://router.lan:8989>).
 
+The same LuCI page also provides visual configuration with validation, including:
+
+- network options (`listen_port`, `bind_address`, `proxyprotocol_port`)
+- metadata/privacy options (`server_lat`, `server_lng`, `ipinfo_api_key`, `redact_ip_addresses`)
+- storage options (`database_type`, `database_file`, MySQL/PostgreSQL connection fields)
+
 ## Notes
 
 - Backend binaries are downloaded at build time from the speedtest-go GitHub releases (default: v1.1.5) and installed as `/usr/share/zzzcatspeedtest/speedtest-go`.

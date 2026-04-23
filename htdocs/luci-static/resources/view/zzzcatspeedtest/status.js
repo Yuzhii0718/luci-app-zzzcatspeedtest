@@ -25,6 +25,39 @@ function asBool(v) {
 	return v === true || v === 1 || v === '1' || v === 'true';
 }
 
+function parseInteger(value) {
+	if (value == null || value === '')
+		return NaN;
+
+	return parseInt(String(value), 10);
+}
+
+function validatePort(value, allowZero) {
+	var n = parseInteger(value);
+
+	if (isNaN(n) || String(n) !== String(value).trim())
+		return _('Expecting a valid integer');
+
+	if (allowZero)
+		return (n >= 0 && n <= 65535) ? true : _('Expecting a port value between 0 and 65535');
+
+	return (n >= 1 && n <= 65535) ? true : _('Expecting a port value between 1 and 65535');
+}
+
+function validateFloatInRange(value, min, max, label) {
+	if (value == null || value === '')
+		return true;
+
+	var n = Number(value);
+	if (isNaN(n))
+		return _('Expecting a valid number');
+
+	if (n < min || n > max)
+		return _('%s must be between %s and %s').format(label, min, max);
+
+	return true;
+}
+
 return view.extend({
 	load: function() {
 		return Promise.all([
@@ -144,6 +177,104 @@ return view.extend({
 		o.onclick = function() {
 			window.open('http://' + window.location.hostname + ':' + listenPort, '_blank');
 		};
+
+		o = s.option(form.Value, 'listen_port', _('Listen port'));
+		o.datatype = 'port';
+		o.placeholder = '8989';
+		o.default = '8989';
+		o.rmempty = false;
+		o.description = _('Port used by web UI and test API.');
+		o.validate = function(section_id, value) {
+			return validatePort(value, false);
+		};
+
+		o = s.option(form.Value, 'bind_address', _('Bind address'));
+		o.placeholder = '0.0.0.0';
+		o.rmempty = true;
+		o.description = _('Optional. Leave empty to listen on all interfaces.');
+
+		o = s.option(form.Value, 'proxyprotocol_port', _('Proxy protocol port'));
+		o.placeholder = '0';
+		o.default = '0';
+		o.rmempty = false;
+		o.description = _('0 disables proxy protocol listener.');
+		o.validate = function(section_id, value) {
+			return validatePort(value, true);
+		};
+
+		o = s.option(form.Value, 'server_lat', _('Server latitude'));
+		o.placeholder = '1';
+		o.default = '1';
+		o.rmempty = false;
+		o.description = _('Optional display value used by speedtest UI.');
+		o.validate = function(section_id, value) {
+			return validateFloatInRange(value, -90, 90, _('Server latitude'));
+		};
+
+		o = s.option(form.Value, 'server_lng', _('Server longitude'));
+		o.placeholder = '1';
+		o.default = '1';
+		o.rmempty = false;
+		o.description = _('Optional display value used by speedtest UI.');
+		o.validate = function(section_id, value) {
+			return validateFloatInRange(value, -180, 180, _('Server longitude'));
+		};
+
+		o = s.option(form.Value, 'ipinfo_api_key', _('IPInfo API key'));
+		o.password = true;
+		o.rmempty = true;
+		o.description = _('Optional. Used for IP geolocation enrichment.');
+
+		o = s.option(form.Value, 'assets_path', _('Assets path'));
+		o.placeholder = '/usr/share/zzzcatspeedtest/assets';
+		o.rmempty = true;
+		o.description = _('Leave empty to use bundled assets.');
+
+		o = s.option(form.Flag, 'redact_ip_addresses', _('Redact IP addresses'));
+		o.default = '0';
+		o.rmempty = false;
+		o.description = _('Enable to hide client IP addresses in test results.');
+
+		o = s.option(form.ListValue, 'database_type', _('Database type'));
+		o.value('none', _('None'));
+		o.value('bolt', _('BoltDB'));
+		o.value('sqlite', _('SQLite'));
+		o.value('mysql', _('MySQL'));
+		o.value('postgres', _('PostgreSQL'));
+		o.default = 'none';
+		o.rmempty = false;
+		o.description = _('Storage backend for speedtest history.');
+
+		o = s.option(form.Value, 'database_file', _('Database file'));
+		o.placeholder = '/var/lib/zzzcatspeedtest/speedtest.db';
+		o.default = '/var/lib/zzzcatspeedtest/speedtest.db';
+		o.rmempty = true;
+		o.description = _('Used by BoltDB / SQLite backends.');
+		o.depends('database_type', 'bolt');
+		o.depends('database_type', 'sqlite');
+
+		o = s.option(form.Value, 'database_hostname', _('Database host'));
+		o.placeholder = '127.0.0.1:3306';
+		o.rmempty = true;
+		o.description = _('Host:port for MySQL / PostgreSQL.');
+		o.depends('database_type', 'mysql');
+		o.depends('database_type', 'postgres');
+
+		o = s.option(form.Value, 'database_name', _('Database name'));
+		o.rmempty = true;
+		o.depends('database_type', 'mysql');
+		o.depends('database_type', 'postgres');
+
+		o = s.option(form.Value, 'database_username', _('Database username'));
+		o.rmempty = true;
+		o.depends('database_type', 'mysql');
+		o.depends('database_type', 'postgres');
+
+		o = s.option(form.Value, 'database_password', _('Database password'));
+		o.password = true;
+		o.rmempty = true;
+		o.depends('database_type', 'mysql');
+		o.depends('database_type', 'postgres');
 
 		return m.render();
 	}

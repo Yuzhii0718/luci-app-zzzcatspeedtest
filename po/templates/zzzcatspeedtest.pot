@@ -84,3 +84,105 @@ msgstr ""
 
 msgid "Disable autostart"
 msgstr ""
+
+msgid "Expecting a valid integer"
+msgstr ""
+
+msgid "Expecting a port value between 0 and 65535"
+msgstr ""
+
+msgid "Expecting a port value between 1 and 65535"
+msgstr ""
+
+msgid "Expecting a valid number"
+msgstr ""
+
+msgid "%s must be between %s and %s"
+msgstr ""
+
+msgid "Listen port"
+msgstr ""
+
+msgid "Port used by web UI and test API."
+msgstr ""
+
+msgid "Bind address"
+msgstr ""
+
+msgid "Optional. Leave empty to listen on all interfaces."
+msgstr ""
+
+msgid "Proxy protocol port"
+msgstr ""
+
+msgid "0 disables proxy protocol listener."
+msgstr ""
+
+msgid "Server latitude"
+msgstr ""
+
+msgid "Optional display value used by speedtest UI."
+msgstr ""
+
+msgid "Server longitude"
+msgstr ""
+
+msgid "IPInfo API key"
+msgstr ""
+
+msgid "Optional. Used for IP geolocation enrichment."
+msgstr ""
+
+msgid "Assets path"
+msgstr ""
+
+msgid "Leave empty to use bundled assets."
+msgstr ""
+
+msgid "Redact IP addresses"
+msgstr ""
+
+msgid "Enable to hide client IP addresses in test results."
+msgstr ""
+
+msgid "Database type"
+msgstr ""
+
+msgid "None"
+msgstr ""
+
+msgid "BoltDB"
+msgstr ""
+
+msgid "SQLite"
+msgstr ""
+
+msgid "MySQL"
+msgstr ""
+
+msgid "PostgreSQL"
+msgstr ""
+
+msgid "Storage backend for speedtest history."
+msgstr ""
+
+msgid "Database file"
+msgstr ""
+
+msgid "Used by BoltDB / SQLite backends."
+msgstr ""
+
+msgid "Database host"
+msgstr ""
+
+msgid "Host:port for MySQL / PostgreSQL."
+msgstr ""
+
+msgid "Database name"
+msgstr ""
+
+msgid "Database username"
+msgstr ""
+
+msgid "Database password"
+msgstr ""

@@ -84,3 +84,105 @@ msgstr "启用自启"
 
 msgid "Disable autostart"
 msgstr "禁用自启"
+
+msgid "Expecting a valid integer"
+msgstr "请输入有效整数"
+
+msgid "Expecting a port value between 0 and 65535"
+msgstr "请输入 0 到 65535 之间的端口值"
+
+msgid "Expecting a port value between 1 and 65535"
+msgstr "请输入 1 到 65535 之间的端口值"
+
+msgid "Expecting a valid number"
+msgstr "请输入有效数字"
+
+msgid "%s must be between %s and %s"
+msgstr "%s 必须在 %s 到 %s 之间"
+
+msgid "Listen port"
+msgstr "监听端口"
+
+msgid "Port used by web UI and test API."
+msgstr "用于 Web 界面与测试 API 的端口。"
+
+msgid "Bind address"
+msgstr "绑定地址"
+
+msgid "Optional. Leave empty to listen on all interfaces."
+msgstr "可选。留空表示监听所有接口。"
+
+msgid "Proxy protocol port"
+msgstr "Proxy protocol 端口"
+
+msgid "0 disables proxy protocol listener."
+msgstr "设为 0 可禁用 proxy protocol 监听。"
+
+msgid "Server latitude"
+msgstr "服务器纬度"
+
+msgid "Optional display value used by speedtest UI."
+msgstr "可选显示值，用于 speedtest 页面展示。"
+
+msgid "Server longitude"
+msgstr "服务器经度"
+
+msgid "IPInfo API key"
+msgstr "IPInfo API 密钥"
+
+msgid "Optional. Used for IP geolocation enrichment."
+msgstr "可选。用于 IP 地理位置信息增强。"
+
+msgid "Assets path"
+msgstr "资源路径"
+
+msgid "Leave empty to use bundled assets."
+msgstr "留空则使用内置静态资源。"
+
+msgid "Redact IP addresses"
+msgstr "脱敏 IP 地址"
+
+msgid "Enable to hide client IP addresses in test results."
+msgstr "启用后将在测试结果中隐藏客户端 IP 地址。"
+
+msgid "Database type"
+msgstr "数据库类型"
+
+msgid "None"
+msgstr "无"
+
+msgid "BoltDB"
+msgstr "BoltDB"
+
+msgid "SQLite"
+msgstr "SQLite"
+
+msgid "MySQL"
+msgstr "MySQL"
+
+msgid "PostgreSQL"
+msgstr "PostgreSQL"
+
+msgid "Storage backend for speedtest history."
+msgstr "用于 speedtest 历史记录的存储后端。"
+
+msgid "Database file"
+msgstr "数据库文件"
+
+msgid "Used by BoltDB / SQLite backends."
+msgstr "用于 BoltDB / SQLite 后端。"
+
+msgid "Database host"
+msgstr "数据库主机"
+
+msgid "Host:port for MySQL / PostgreSQL."
+msgstr "MySQL / PostgreSQL 的主机:端口。"
+
+msgid "Database name"
+msgstr "数据库名称"
+
+msgid "Database username"
+msgstr "数据库用户名"
+
+msgid "Database password"
+msgstr "数据库密码"

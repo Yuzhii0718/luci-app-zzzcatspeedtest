@@ -37,7 +37,7 @@ write_settings() {
 	# If assets_path not set in UCI, default to bundled assets
 	[ -z "$assets_path" ] && assets_path="${SERVICE_HOME}/assets"
 	redact_ip=$(bool_to_toml "$(load_option main redact_ip_addresses 0)")
-	db_type=$(load_option main database_type bolt)
+	db_type=$(load_option main database_type none)
 	db_host=$(load_option main database_hostname "")
 	db_name=$(load_option main database_name "")
 	db_user=$(load_option main database_username "")
